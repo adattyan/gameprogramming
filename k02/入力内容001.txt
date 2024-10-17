@@ -1,0 +1,28 @@
+GP3_3D基礎v1　input部分の修正箇所
+
+①カメラの設定
+177-178行目
+	D3DXVECTOR3 eye(0, 0, data->transz);	// カメラ位置は (0, 0, transz)
+	D3DXVECTOR3 look(0, 0, 0); // カメラの注視点は原点.
+183行目
+	D3DXMatrixLookAtRH(&camera, &eye, &look, &camUp);
+186行目
+	data->dev->SetTransform(D3DTS_VIEW, &camera);
+190行目
+	D3DXMatrixPerspectiveFovRH(&proj, D3DX_PI/2, data->aspect, 0.1f, 100.0f);
+193行目
+	data->dev->SetTransform(D3DTS_PROJECTION, &proj);
+
+②ワールド座標系の設定
+269行目
+	D3DXMatrixIdentity(&ww);		// まず単位行列にする.
+271-272行目
+	D3DXMatrixRotationY(&tmp, data->roty);
+	D3DXMatrixMultiply(&ww, &ww, &tmp);
+277行目
+	data->dev->SetTransform(D3DTS_WORLD, &ww);
+
+③ライト
+216-217行目
+	data->dev->SetLight(0, &light);				// ０番に設定.
+	data->dev->LightEnable(0, data->light[0]);	// ０番カメラの（有効／無効）を設定する.
